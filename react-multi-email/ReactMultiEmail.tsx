@@ -3,7 +3,7 @@ import { isEmail, isEmail as isEmailFn } from './isEmail';
 
 export interface IReactMultiEmailProps {
   id?: string;
-  emails?: string[];
+  propsEmails?: string[];
   onChange?: (emails: string[]) => void;
   enable?: ({ emailCnt }: { emailCnt: number }) => boolean;
   onDisabled?: () => void;
@@ -46,7 +46,7 @@ export function ReactMultiEmail(props: IReactMultiEmailProps) {
   const {
     id,
     style,
-    emails: propsEmails,
+    propsEmails,
     className = '',
     noClass,
     placeholder,
@@ -74,9 +74,13 @@ export function ReactMultiEmail(props: IReactMultiEmailProps) {
   const emailInputRef = React.useRef<HTMLInputElement>(null);
 
   const [focused, setFocused] = React.useState(false);
-  const [emails, setEmails] = React.useState<string[]>(() => initialEmailAddress(propsEmails));
+  const [emails, setEmails] = React.useState([]);
   const [inputValue, setInputValue] = React.useState(initialInputValue);
   const [spinning, setSpinning] = React.useState(false);
+
+  useEffect(() => {
+    setEmails(propsEmails)
+  }, [propsEmails])
 
   const findEmailAddress = React.useCallback(
     async (value: string, isEnter?: boolean) => {
